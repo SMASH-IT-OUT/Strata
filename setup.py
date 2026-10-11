@@ -4,7 +4,7 @@
     START-HERE.bat  (Windows)   /   ./setup.sh  (Linux)      - they install Python if needed and run this file
 
 The first time it asks four questions - which model (the original Qwen3.8-Flash-Next or the Swift 1.5 fine-tune),
-which size, how much context, and whether the model should also read images - then installs everything and starts the model on http://127.0.0.1:8080 (OpenAI- and Anthropic-compatible
+which size, how much context, and whether the model should also read images - then installs everything and starts the model on http://127.0.0.1:8081 (OpenAI- and Anthropic-compatible
 API; a small page there shows that it runs). Every later start skips straight to running the model: nothing that
 is already downloaded, installed or prepared is done again.
 
@@ -23,7 +23,7 @@ What the first run does (each step is skipped when it is already done):
 Options: --family qwen|swift, --model Q2_0|IQ2_XS|IQ3_XXS|IQ3_S, --context 32768, --rope-scaling none|linear|yarn
 (--rope-scale F; past the trained 262144 the setup adds yarn and the factor is the final context over 262144,
 at least 1 - an explicit --rope-scaling none is refused for such a context), --vision yes|no|gpu|cpu, --port
-8080, --yes (recommended
+8081, --yes (recommended
 answers, no questions), --setup (install another model / change settings instead of starting), --no-start,
 --host 0.0.0.0 --api-key KEY (reach it from other devices on your network), --experimental-speed-projection on|off
 (EXPERIMENTAL, off by default),
@@ -3985,7 +3985,7 @@ def settings_summary(cfg: dict, port=None) -> str:
         if val is not None and ("/" in val or "\\" in val or val.lower().endswith((".gguf", ".bin"))):
             continue                                   # a path: --native, --mtp, --profile ...
         out.append(flag if val is None else f"{flag} {val}")
-    srv = [f"{cfg.get('host', '127.0.0.1')}:{port or cfg.get('port', 8080)}"]
+    srv = [f"{cfg.get('host', '127.0.0.1')}:{port or cfg.get('port', 8081)}"]
     if cfg.get("api_key"):
         srv.append("api key set")
     if cfg.get("open_browser") is False:               # #609
@@ -4025,7 +4025,7 @@ def start(cfg_path: Path, port: int | None, gpu: int | list | None = None, open_
     if "--mtp" in cfg["args"][:-1]:
         refresh_draft_vocab(Path(cfg["args"][cfg["args"].index("--mtp") + 1]), cfg.get("draft_vocab", "cjk"))
     cmd = [sys.executable, str(ROOT / "serve" / "server.py"), "--engine", "strata", "--config", str(cfg_path),
-           "--port", str(port or cfg.get("port", 8080))]
+           "--port", str(port or cfg.get("port", 8081))]
     if cfg.get("backend") == "hip":                    # AMD, numbered as HIP numbers them (setup's KFD order)
         if WIN:
             hip_runtime_beside_exe(Path(cfg["exe"]).parent)   # #468 #461: also fixes a 0.1.34 install
@@ -4534,7 +4534,7 @@ def main() -> int:
     ap.add_argument("--experimental-speed-projection", metavar="on|off|GGUF",
                     help="EXPERIMENTAL, off by default: the control vector in data/experimental-speed-projection "
                          "(or another GGUF) as a projection on layers 4-44; see docs/DETAILS.md")
-    ap.add_argument("--port", type=int, help="the server's port (default: the one the install was set up with, 8080 for a new one)")
+    ap.add_argument("--port", type=int, help="the server's port (default: the one the install was set up with, 8081 for a new one)")
     ap.add_argument("--gpu", help="one GPU, numbered as nvidia-smi numbers them (default: asked when several can be "
                                   "used; with --setup it is saved, when starting it is for that start only)")
     ap.add_argument("--gpus", help="several GPUs sharing one model, as nvidia-smi numbers them (AMD: as setup lists "
@@ -4674,7 +4674,7 @@ def main() -> int:
     # on the first one alone unless given with --setup), --gpu N runs this start on one card; neither: the saved
     # choice, and asked once when the PC has cards that could share the model
     run_gpu = start_gpus(a.gpus) or a.gpu
-    port = a.port or 8080                              # a new install's port (issue #32: --port for an existing one)
+    port = a.port or 8081                              # a new install's port (issue #32: --port for an existing one)
     if have and a.calibrate and not (a.setup or a.model or a.family or a.check):
         if not a.build:
             update_installed_engine(a.prebuilt)
