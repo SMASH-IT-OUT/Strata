@@ -99,7 +99,7 @@ asks you a few questions:
 
 Press Enter each time for the recommended answer. Then it downloads the model (about 70 GB) and starts it. If the
 download stops, run it again: it continues where it left off. Your browser opens the Strata app at
-`http://127.0.0.1:8080`.
+`http://127.0.0.1:8081`.
 
 > **While the model starts, your PC can be slow or stop responding for 1-3 minutes** (longest the first time).
 > Strata loads 35-55 GB into your RAM and locks part of it for the graphics card. This is normal. Wait, and don't
@@ -142,12 +142,12 @@ Sizes, downloads and what fits where: [docs/MODELS.md](docs/MODELS.md). To add a
 <p align="center"><img src="docs/media/runpagoda.png" width="900" alt="The Strata app's Monitor tab next to a coding agent"><br>
 <sub>The Strata app's <b>Monitor</b> (left) while a coding agent writes the pagoda garden from the video (right)</sub></p>
 
-- **In the browser:** open `http://127.0.0.1:8080`. It has **Chat**, a live **Monitor** of the model and your
+- **In the browser:** open `http://127.0.0.1:8081`. It has **Chat**, a live **Monitor** of the model and your
   GPU/CPU/RAM, and **About** with the settings and addresses.
 - **Your apps and coding agents:** add an "OpenAI-compatible" provider with the base URL
-  **`http://127.0.0.1:8080/v1`**. Any API key and any model name work.
-  - Apps that use Anthropic's API: `http://127.0.0.1:8080/v1/messages` (Claude Code:
-    `ANTHROPIC_BASE_URL=http://127.0.0.1:8080`).
+  **`http://127.0.0.1:8081/v1`**. Any API key and any model name work.
+  - Apps that use Anthropic's API: `http://127.0.0.1:8081/v1/messages` (Claude Code:
+    `ANTHROPIC_BASE_URL=http://127.0.0.1:8081`).
   - Codex CLI and other apps that use the OpenAI Responses API: `/v1/responses`
     ([setup](docs/DETAILS.md#the-responses-api-and-codex-cli)).
 - **Thinking:** choose **off, low, medium or high** in the chat menu or in your app's "reasoning effort". Off is the
@@ -170,7 +170,7 @@ More: [where your chats are stored](docs/INSTALL.md#where-things-are-stored), [t
   it stopped.
 - **It's very slow and the disk light keeps blinking, or it says "the engine stopped unexpectedly".** Your PC does
   not have enough free RAM. Close other programs (browsers use a lot), or pick a smaller size (Q2_0 or IQ2_XS).
-- **It says port 8080 is already in use.** Strata is already running. Look for its window.
+- **It says port 8081 is already in use.** Strata is already running. Look for its window.
 
 More problems and their fixes: [docs/TROUBLESHOOTING.md](docs/TROUBLESHOOTING.md). Still stuck? Open an
 [issue](https://github.com/Niko1221/Strata/issues) and attach `strata-<model>.log` from the Strata folder. Found a

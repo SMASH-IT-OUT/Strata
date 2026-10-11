@@ -4,7 +4,7 @@ Reads the document once, then asks each question and reports, per question, the 
 the whole request, and the run's total.  Greedy (temperature 0), so two runs of the same file give the same answers and
 a change in how the server keeps the document (the shared prefix below) can be compared answer by answer.
 
-    python tools/research_run.py --url http://127.0.0.1:8080 --doc paper.txt --questions questions.txt
+    python tools/research_run.py --url http://127.0.0.1:8081 --doc paper.txt --questions questions.txt
     python tools/research_run.py --doc paper.txt --questions q.txt --prefix off --json base.json
     python tools/research_run.py --doc paper.txt --questions q.txt --prefix on  --json fork.json
     python tools/research_run.py --compare base.json fork.json
@@ -115,7 +115,7 @@ def compare(a_path: str, b_path: str) -> int:
 
 def main(argv=None) -> int:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("--url", default="http://127.0.0.1:8080")
+    ap.add_argument("--url", default="http://127.0.0.1:8081")
     ap.add_argument("--api-key", default="")
     ap.add_argument("--model", default=None)
     ap.add_argument("--doc")

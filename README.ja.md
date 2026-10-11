@@ -99,7 +99,7 @@ Strata のインストール、起動、停止もできます。
 
 毎回 Enter を押せば、おすすめの答えになります。そのあとモデル（約 70 GB）をダウンロードして起動します。
 ダウンロードが止まったら、もう一度実行してください。続きから再開します。ブラウザーで Strata アプリが
-`http://127.0.0.1:8080` に開きます。
+`http://127.0.0.1:8081` に開きます。
 
 > **モデルの起動中、1-3 分ほど PC が重くなったり、反応しなくなったりすることがあります**（初回がいちばん長いです）。
 > Strata は 35-55 GB を RAM に読み込み、その一部をグラフィックカード用に固定します。これは正常です。
@@ -141,12 +141,12 @@ Strata のインストール、起動、停止もできます。
 <p align="center"><img src="docs/media/runpagoda.png" width="900" alt="Strata アプリの Monitor タブと、その横で動くコーディングエージェント"><br>
 <sub>Strata アプリの <b>Monitor</b>（左）。コーディングエージェントが動画の五重塔の庭を書いているところ（右）</sub></p>
 
-- **ブラウザーで：** `http://127.0.0.1:8080` を開きます。**Chat**、モデルと GPU/CPU/RAM の様子をリアルタイムで見る **Monitor**、
+- **ブラウザーで：** `http://127.0.0.1:8081` を開きます。**Chat**、モデルと GPU/CPU/RAM の様子をリアルタイムで見る **Monitor**、
   設定とアドレスが載った **About** があります。
 - **アプリやコーディングエージェントから：** 「OpenAI-compatible」プロバイダーを追加し、ベース URL に
-  **`http://127.0.0.1:8080/v1`** を指定します。API キーとモデル名は何でもかまいません。
-  - Anthropic の API を使うアプリ：`http://127.0.0.1:8080/v1/messages`（Claude Code：
-    `ANTHROPIC_BASE_URL=http://127.0.0.1:8080`）。
+  **`http://127.0.0.1:8081/v1`** を指定します。API キーとモデル名は何でもかまいません。
+  - Anthropic の API を使うアプリ：`http://127.0.0.1:8081/v1/messages`（Claude Code：
+    `ANTHROPIC_BASE_URL=http://127.0.0.1:8081`）。
   - Codex CLI など OpenAI Responses API を使うアプリ：`/v1/responses`
     （[設定方法](docs/DETAILS.md#the-responses-api-and-codex-cli)）。
 - **思考（Thinking）：** チャットのメニュー、またはアプリの「reasoning effort」で **off、low、medium、high** を選びます。
@@ -169,7 +169,7 @@ Strata のインストール、起動、停止もできます。
   止まったところから続きます。
 - **とても遅く、ディスクのランプが点滅し続ける。または「the engine stopped unexpectedly」と表示される。** PC の空き RAM が
   足りません。ほかのプログラムを閉じるか（ブラウザーは多く使います）、小さいサイズ（Q2_0 または IQ2_XS）を選んでください。
-- **ポート 8080 がすでに使われていると表示される。** Strata はもう動いています。そのウィンドウを探してください。
+- **ポート 8081 がすでに使われていると表示される。** Strata はもう動いています。そのウィンドウを探してください。
 
 ほかの問題と解決方法：[docs/TROUBLESHOOTING.md](docs/TROUBLESHOOTING.md)。それでも解決しない場合は
 [issue](https://github.com/Niko1221/Strata/issues) を作成し、Strata フォルダーにある `strata-<model>.log` を添付してください。
