@@ -5325,6 +5325,29 @@ def sampling_defaults_from_config(cfg: dict) -> dict:
     return out
 
 
+class StampedOut:
+    """The console with a clock: every line that starts with "[strata]" gets "HH:MM:SS " in front of it (operator,
+    2026-10-12: "strata console prompt should have timestamp as prefix for output"), so a stall or a slow prompt can be
+    timed from the window alone. Continuation lines (indented) and the engine's own lines are left as they are. One
+    wrapper over sys.stdout, installed by main(), so the ~80 print("[strata] ...") calls stay as they are."""
+
+    def __init__(self, raw):
+        self.raw = raw
+        self.bol = True
+
+    def write(self, s):
+        out = []
+        for part in str(s).splitlines(True):
+            if self.bol and part.startswith("[strata]"):
+                part = time.strftime("%H:%M:%S ") + part
+            out.append(part)
+            self.bol = part.endswith(("\n", "\r"))
+        return self.raw.write("".join(out))
+
+    def __getattr__(self, name):
+        return getattr(self.raw, name)
+
+
 def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--engine", choices=["mock", "strata"], default="mock")
@@ -5367,6 +5390,8 @@ def main() -> int:
                     help="enable POST /slots/0?action=save|restore {\"filename\": NAME} (llama-server's API): the "
                          "conversation the engine holds, to or from DIR/NAME (also \"slot_save_path\" in the config)")
     a = ap.parse_args()
+    if not isinstance(sys.stdout, StampedOut) and not os.environ.get("STRATA_NO_TIMESTAMPS"):
+        sys.stdout = StampedOut(sys.stdout)
     cfg = json.loads(Path(a.config).read_text(encoding="utf-8-sig")) if a.config else {}   # Notepad adds a BOM
     if a.gpu is not None:
         cfg["gpu"] = int(a.gpu) if a.gpu.strip().isdigit() else a.gpu

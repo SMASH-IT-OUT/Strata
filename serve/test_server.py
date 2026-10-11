@@ -40,6 +40,22 @@ class RecordingEngine(MockEngine):
         yield from super().generate(ids, max_new, sampling, cancel, embeddings)
 
 
+class ConsoleTimestamps(unittest.TestCase):
+    def test_strata_lines_get_a_clock_and_others_do_not(self):
+        from serve.server import StampedOut
+        raw = io.StringIO()
+        out = StampedOut(raw)
+        print("[strata] thinking: 29 of max 8000 tokens", file=out)      # print() writes the text, then "\n"
+        print("        continuation line", file=out)
+        out.write("engine: raw line\n[strata] two in one write\n")
+        lines = raw.getvalue().splitlines()
+        self.assertRegex(lines[0], r"^\d\d:\d\d:\d\d \[strata\] thinking: 29 of max 8000 tokens$")
+        self.assertEqual(lines[1], "        continuation line")
+        self.assertEqual(lines[2], "engine: raw line")
+        self.assertRegex(lines[3], r"^\d\d:\d\d:\d\d \[strata\] two in one write$")
+        self.assertTrue(hasattr(out, "flush"))
+
+
 class MaxTokens(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
