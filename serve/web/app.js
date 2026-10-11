@@ -71,6 +71,19 @@ matchMedia("(prefers-color-scheme: dark)").addEventListener("change", (e) => {
   if (!saved) setTheme(e.matches ? "dark" : "light", false);
 });
 
+// a double-click on the top bar's empty space toggles full screen, like a desktop app's title bar. A page in a
+// browser tab cannot maximise the browser's window (browsers allow resizeTo only on windows a script opened).
+function toggleFullscreen(e) {
+  if (e.target.closest("button, a, input, select, textarea, [role=status]")) return;
+  const d = document;
+  if (d.fullscreenElement || d.webkitFullscreenElement) (d.exitFullscreen || d.webkitExitFullscreen).call(d);
+  else {
+    const el = d.documentElement, go = el.requestFullscreen || el.webkitRequestFullscreen;
+    if (go) Promise.resolve(go.call(el)).catch(() => { /* the browser refused: nothing to undo */ });
+  }
+}
+document.querySelector(".st-header").addEventListener("dblclick", toggleFullscreen);
+
 let tab = "chat";
 function showTab(name) {
   tab = ["chat", "monitor", "about"].includes(name) ? name : "chat";
