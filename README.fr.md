@@ -99,7 +99,7 @@ Il vous pose quelques questions :
 
 Appuyez sur Entrée à chaque fois pour garder la réponse recommandée. Ensuite il télécharge le modèle (environ 70 Go)
 et le démarre. Si le téléchargement s'arrête, relancez-le : il reprend là où il s'était arrêté. Votre navigateur
-ouvre l'application Strata à l'adresse `http://127.0.0.1:8081`.
+ouvre l'application Strata à l'adresse `http://127.0.0.1:8080`.
 
 > **Pendant le démarrage du modèle, votre PC peut ralentir ou ne plus répondre pendant 1-3 minutes** (plus longtemps la première fois).
 > Strata charge 35-55 Go dans votre RAM et en réserve une partie pour la carte graphique. C'est normal. Attendez, et
@@ -144,12 +144,12 @@ tard, lancez `SETUP.bat` (Linux : `./setup.sh --setup`).
 <p align="center"><img src="docs/media/runpagoda.png" width="900" alt="L'onglet Monitor de l'application Strata à côté d'un agent de code"><br>
 <sub>Le <b>Monitor</b> de l'application Strata (à gauche) pendant qu'un agent de code écrit le jardin de pagode de la vidéo (à droite)</sub></p>
 
-- **Dans le navigateur :** ouvrez `http://127.0.0.1:8081`. Vous y trouvez **Chat**, un **Monitor** en direct du
+- **Dans le navigateur :** ouvrez `http://127.0.0.1:8080`. Vous y trouvez **Chat**, un **Monitor** en direct du
   modèle et de votre GPU/CPU/RAM, et **About** avec les réglages et les adresses.
 - **Vos applications et agents de code :** ajoutez un fournisseur « OpenAI-compatible » avec l'URL de base
-  **`http://127.0.0.1:8081/v1`**. N'importe quelle clé API et n'importe quel nom de modèle fonctionnent.
-  - Applications qui utilisent l'API d'Anthropic : `http://127.0.0.1:8081/v1/messages` (Claude Code :
-    `ANTHROPIC_BASE_URL=http://127.0.0.1:8081`).
+  **`http://127.0.0.1:8080/v1`**. N'importe quelle clé API et n'importe quel nom de modèle fonctionnent.
+  - Applications qui utilisent l'API d'Anthropic : `http://127.0.0.1:8080/v1/messages` (Claude Code :
+    `ANTHROPIC_BASE_URL=http://127.0.0.1:8080`).
   - Codex CLI et les autres applications qui utilisent l'API OpenAI Responses : `/v1/responses`
     ([configuration](docs/DETAILS.md#the-responses-api-and-codex-cli)).
 - **Réflexion :** choisissez **off, low, medium ou high** dans le menu du chat ou dans le « reasoning effort » de
@@ -177,7 +177,7 @@ Plus d'infos : [où sont stockées vos discussions](docs/INSTALL.md#where-things
 - **C'est très lent et le voyant du disque clignote sans arrêt, ou il affiche « the engine stopped unexpectedly ».**
   Votre PC n'a pas assez de RAM libre. Fermez les autres programmes (les navigateurs en utilisent beaucoup), ou
   choisissez une taille plus petite (Q2_0 ou IQ2_XS).
-- **Il dit que le port 8081 est déjà utilisé.** Strata tourne déjà. Cherchez sa fenêtre.
+- **Il dit que le port 8080 est déjà utilisé.** Strata tourne déjà. Cherchez sa fenêtre.
 
 Autres problèmes et leurs solutions : [docs/TROUBLESHOOTING.md](docs/TROUBLESHOOTING.md). Toujours bloqué ? Ouvrez une
 [issue](https://github.com/Niko1221/Strata/issues) et joignez `strata-<model>.log` depuis le dossier Strata. Vous

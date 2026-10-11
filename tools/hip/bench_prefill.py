@@ -18,7 +18,7 @@ FIELDS = ('prompt_tokens', 'reused', 'fresh', 'prefill_ms', 'prefill_tps', 'gene
 
 def main():
     p = argparse.ArgumentParser(description=__doc__)
-    p.add_argument('--url', default='http://127.0.0.1:8081')
+    p.add_argument('--url', default='http://127.0.0.1:8080')
     p.add_argument('--model', required=True)
     p.add_argument('--engine-log', type=Path, required=True)
     p.add_argument('--output', type=Path, required=True)

@@ -49,7 +49,7 @@ def main():
         sys.exit(1)
     a = sys.argv
     model = a[a.index("--model") + 1].lower()
-    cfg = {"exe": sys.executable, "args": ["--max-context", a[a.index("--context") + 1]], "port": 8081,
+    cfg = {"exe": sys.executable, "args": ["--max-context", a[a.index("--context") + 1]], "port": 8080,
            "model_name": "qwen3.8-flash-next-" + model, "log": str(root / f"strata-{model}.log")}
     (root / f"strata-{model}.json").write_text(json.dumps(cfg))
     print("All set.", flush=True)
@@ -203,7 +203,7 @@ class FakeRoot(unittest.TestCase):
         res = r["result"]
         return json.loads(res["content"][0]["text"]), res["isError"]
 
-    def write_config(self, tag="q2_0", port=8081, **extra):
+    def write_config(self, tag="q2_0", port=8080, **extra):
         cfg = {"exe": sys.executable, "args": ["--max-context", "32768"], "port": port,
                "model_name": f"qwen3.8-flash-next-{tag}", "log": str(self.root / f"strata-{tag}.log"), **extra}
         (self.root / f"strata-{tag}.json").write_text(json.dumps(cfg))

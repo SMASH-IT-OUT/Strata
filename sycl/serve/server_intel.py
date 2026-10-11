@@ -1,6 +1,6 @@
 """serve/server.py for an Intel Arc: the same server, with the Intel pieces added from outside.
 
-    python sycl/serve/server_intel.py --engine strata --config strata-<model>.json --port 8081 [...]
+    python sycl/serve/server_intel.py --engine strata --config strata-<model>.json --port 8080 [...]
 
 Every argument is serve/server.py's.  Nothing in serve/ is edited (the SYCL port keeps out of the shared files so
 upstream merges stay clean); this wrapper adds, at run time:
@@ -79,7 +79,7 @@ def install_switcher(argv):
     url = cfg.get("model_switcher")
     if not url:
         return
-    port = arg("--port", "8081")
+    port = arg("--port", "8080")
     web = HERE / "web"
     types = {".js": "text/javascript; charset=utf-8", ".css": "text/css; charset=utf-8"}
     make_handler = S.make_handler

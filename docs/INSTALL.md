@@ -35,7 +35,7 @@ the engine for your GPU (asks first; 20-40 minutes once). More: [details](DETAIL
 3. Answer a few questions - or just press Enter each time for the recommended choice ([the questions](#setups-questions)).
 
 Then it downloads everything (the model is ~70 GB, so the first time takes a while - you can stop and it picks up
-where it left off) and **starts the model**. Your browser opens the Strata app at `http://127.0.0.1:8081`.
+where it left off) and **starts the model**. Your browser opens the Strata app at `http://127.0.0.1:8080`.
 
 > **While the model starts, your PC can be slow or stop responding for 1-3 minutes** (longest the first time): Strata
 > loads 35-55 GB into your RAM and locks part of it for the graphics card. That's normal - wait, and don't close the
@@ -53,7 +53,7 @@ start is 24x slower: [Running it at startup](DETAILS.md#running-it-at-startup-ta
 ```
 
 The same questions, the same automatic install (it uses `sudo apt` for Python and, only if it has to compile, for
-the build tools), and the same start: `http://127.0.0.1:8081`. Later runs of `./setup.sh` (or `./run-<model>.sh`)
+the build tools), and the same start: `http://127.0.0.1:8080`. Later runs of `./setup.sh` (or `./run-<model>.sh`)
 start the model directly; `./setup.sh --setup` installs another model or changes the settings. Other distributions,
 WSL and compiling: [details](DETAILS.md#linux).
 
@@ -98,7 +98,7 @@ The same idea, in a container (NVIDIA cards).
    The default covers RTX 30 (86), RTX 40 (89), RTX 50 (120) and A-series (80); a card outside that
    set needs a rebuild with its own arch. Add `--build-arg BUILD_VISION=0` to skip the image encoder.
 3. Run (the first start downloads the ~70 GB model, then starts; later starts go straight to serving):
-   `docker run --rm --gpus all -p 8081:8081 --ulimit memlock=-1 -v strata-data:/data strata`
+   `docker run --rm --gpus all -p 8080:8080 --ulimit memlock=-1 -v strata-data:/data strata`
 
    The setup choices are env vars: `-e MODEL=IQ2_XS -e FAMILY=qwen -e CONTEXT=32768 -e VISION=no`
    (or `MODEL=Q2_0|IQ3_XXS|IQ3_S`, `FAMILY=swift|coder`; the defaults above are the recommended ones).
@@ -123,7 +123,7 @@ The same idea, in a container (NVIDIA cards).
    keeping them in RAM: setup.py measures the host's RAM, not the container's limit, so it cannot
    see a cap. LOW_RAM runs on one card unless `GPUS` names several (then the experts the cards do not hold are
    read through the OS file cache, which can fill the RAM during long prompts).
-   The server listens on `0.0.0.0:8081` by default; set `-e API_KEY=<secret>` before exposing the port
+   The server listens on `0.0.0.0:8080` by default; set `-e API_KEY=<secret>` before exposing the port
    to a network. The image has a `HEALTHCHECK` on `/health`, so `docker ps` shows the container
    healthy once the model is loaded, and `GET /v1/status` says what it is running.
    Model files you already have (setup's `--gguf-dir`): mount their folder and name it, e.g.
@@ -238,7 +238,7 @@ START-HERE.bat --model IQ2_XS --context 32768 --vision yes --yes     no question
 START-HERE.bat --gguf-dir D:\models\IQ2_XS       use GGUF files you already have
 START-HERE.bat --inspect D:\models\some.gguf     what a GGUF really holds and whether Strata runs it (no download)
 START-HERE.bat --data-dir E:\Strata-data         keep the model files somewhere else
-START-HERE.bat --port 8082                      another port
+START-HERE.bat --port 8081                      another port
 START-HERE.bat --gpu 1                          another GPU (setup picks the one with the most VRAM)
 START-HERE.bat --gpus 0,2                       several GPUs sharing the model
 START-HERE.bat --vram-reserve-mib 2048          leave 2 GB of VRAM free for other programs (remembered)
