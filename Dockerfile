@@ -16,7 +16,7 @@
 #
 # Run (host needs an NVIDIA driver >= 580 and nvidia-container-toolkit):
 #   docker run --rm --gpus all \
-#     -p 8081:8081 \
+#     -p 8080:8080 \
 #     --ulimit memlock=-1 \
 #     -v strata-data:/data \
 #     -e MODEL=IQ2_XS \
@@ -105,13 +105,13 @@ PYEOF
 RUN rm -rf build build-vision
 
 VOLUME ["/data"]
-EXPOSE 8081
+EXPOSE 8080
 
 # /health is answered before the API key gate, so it works with or without one.
 # The port only opens after the model loads (1-3 minutes, longer on a first run),
 # so the start period is generous: a too short one marks a still-loading container
 # unhealthy and a restart policy would kill it mid-download.
 HEALTHCHECK --interval=30s --timeout=5s --start-period=600s --retries=3 \
-  CMD curl -fs "http://127.0.0.1:${PORT:-8081}/health" || exit 1
+  CMD curl -fs "http://127.0.0.1:${PORT:-8080}/health" || exit 1
 
 ENTRYPOINT ["./docker-entrypoint.sh"]

@@ -145,7 +145,7 @@ class Context(unittest.TestCase):
         """An update (a new copy of Strata) set up like the earlier install keeps its 256K instead of capping it."""
         with tempfile.TemporaryDirectory() as d:
             prev = Path(d) / "strata-iq3_s.json"
-            prev.write_text(json.dumps({"args": ["--max-context", "262144", "--kv", "int8"], "port": 8081}))
+            prev.write_text(json.dumps({"args": ["--max-context", "262144", "--kv", "int8"], "port": 8080}))
             started = mock.Mock(return_value=0)
             code, out, cfg, _ = install(self.RAM64, self.GPU32, [], extra=[
                 mock.patch.object(setup, "previous_config", lambda *a: prev),
@@ -182,7 +182,7 @@ class BrokenEarlierConfig(unittest.TestCase):
                 self.assertIsNotNone(cfg)                                # the fresh install's config
 
     def test_the_newest_readable_config_is_used(self):
-        good = json.dumps({"args": ["--max-context", "262144", "--kv", "int8"], "port": 8081})
+        good = json.dumps({"args": ["--max-context", "262144", "--kv", "int8"], "port": 8080})
         code, out, cfg, _ = self.setup_with([("strata-iq3_s.json", good), ("strata-q2_0.json", "")])
         self.assertEqual(code, 0, out)
         self.assertIn("strata-q2_0.json (the file is empty)", out)

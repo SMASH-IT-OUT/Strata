@@ -20,7 +20,7 @@ import threading
 import time
 import urllib.request
 
-BASE = sys.argv[1].rstrip("/") if len(sys.argv) > 1 else "http://127.0.0.1:8081"
+BASE = sys.argv[1].rstrip("/") if len(sys.argv) > 1 else "http://127.0.0.1:8080"
 ROUNDS = int(sys.argv[2]) if len(sys.argv) > 2 else 40
 SEED = int(sys.argv[3]) if len(sys.argv) > 3 else 1
 KEY = os.environ.get("STRATA_KEY", "")

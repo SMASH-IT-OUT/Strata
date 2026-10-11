@@ -435,7 +435,7 @@ Windows, `build-essential` + CUDA on Ubuntu) and compiles the engine for your GP
 4. **Images?** yes / no (see [Images](#images-vision)).
 
 Then it downloads and prepares everything (the model is 66-76 GB, so the first start takes a while; an interrupted
-download continues where it stopped) and **starts the model**: your browser opens `http://127.0.0.1:8081`, the Strata
+download continues where it stopped) and **starts the model**: your browser opens `http://127.0.0.1:8080`, the Strata
 app. It has three tabs:
 - **Chat:** streaming answers, the model's thinking (folded away once it answers), code with a copy button, pictures when
   images are on, and sampling and thinking-level settings. Chats stay in your browser.
@@ -443,8 +443,8 @@ app. It has three tabs:
   VRAM, temperature, power and PCIe traffic; CPU, RAM and disk; the context in use; the last requests.
 - **About:** the model and engine settings, and the addresses to connect other apps.
 
-`http://127.0.0.1:8081/?q=your question` opens it with a new chat already asking. The API is at
-`http://127.0.0.1:8081/v1` for your apps.
+`http://127.0.0.1:8080/?q=your question` opens it with a new chat already asking. The API is at
+`http://127.0.0.1:8080/v1` for your apps.
 
 **Every time after that**, `START-HERE.bat` just starts the model (30-90 s to load 34-43 GB into RAM). Nothing is
 downloaded again. Closing the window stops the model.
@@ -455,7 +455,7 @@ SETUP.bat                                       the same (double-click it)
 START-HERE.bat --model IQ2_XS --context 32768 --vision yes --yes     no questions
 START-HERE.bat --gguf-dir D:\models\IQ2_XS       use GGUF files you already have
 START-HERE.bat --data-dir E:\Strata-data         keep the model files somewhere else
-START-HERE.bat --port 8082                      another port
+START-HERE.bat --port 8081                      another port
 START-HERE.bat --gpu 1                          another GPU (numbered as nvidia-smi; setup picks the one with the most VRAM)
 START-HERE.bat --calibrate                      tune the engine for this PC (about 5-10 minutes), then start
 ```
@@ -527,7 +527,7 @@ slowly, the engine prints a hint under its `loaded ... GiB at ...` line naming t
 ```
 
 The same questions, the same automatic install (it uses `sudo apt` for Python and, only if it has to compile,
-for the build tools), and the same start: `http://127.0.0.1:8081`. Later runs of `./setup.sh` (or `./run-<model>.sh`)
+for the build tools), and the same start: `http://127.0.0.1:8080`. Later runs of `./setup.sh` (or `./run-<model>.sh`)
 start the model directly. Options as on Windows (`./setup.sh --setup`, `--model Q2_0 --yes`, `--gguf-dir /data/Q2_0`).
 Terminal chat: `.venv/bin/python chat.py`.
 
@@ -554,7 +554,7 @@ server, three server options (all off by default; also as keys in `strata-<model
 | `--before-load "cmd"` | `"before_load": "cmd"` or `["cmd", "arg"]` | a command run before the model is loaded again, e.g. one that unloads another server's model |
 
 `POST /unload` unloads it now (`409` while a request is running) and `POST /load` loads it ahead of a request (both
-with `Content-Type: application/json`, e.g. `curl -X POST -H "Content-Type: application/json" localhost:8081/unload`);
+with `Content-Type: application/json`, e.g. `curl -X POST -H "Content-Type: application/json" localhost:8080/unload`);
 `/health` says `"loaded"`, `/v1/models` lists it as `unloaded` (like llama.cpp's router), `/props` sets
 `is_sleeping` and the Monitor shows the state. Unloading ends the engine process - and the image encoder, when images
 are on; it is started again first, as at a start - so their VRAM and RAM go straight back. The model files stay in
@@ -634,7 +634,7 @@ per step, so the upper rows are noisy).
 
 ## Using it
 
-The server listens on `http://127.0.0.1:8081` (change with `--port` in setup, or edit the run script).
+The server listens on `http://127.0.0.1:8080` (change with `--port` in setup, or edit the run script).
 
 | API | Endpoint |
 | --- | --- |
@@ -686,13 +686,13 @@ for clients, not a guarantee that the model will follow a request. Zed's llama.c
 offer tools.
 
 ```bash
-curl http://127.0.0.1:8081/v1/chat/completions -H "Content-Type: application/json" -d '{
+curl http://127.0.0.1:8080/v1/chat/completions -H "Content-Type: application/json" -d '{
   "model": "strata", "messages": [{"role": "user", "content": "Write a haiku about GPUs."}], "max_tokens": 512 }'
 ```
 
 ```python
 from openai import OpenAI
-client = OpenAI(base_url="http://127.0.0.1:8081/v1", api_key="none")
+client = OpenAI(base_url="http://127.0.0.1:8080/v1", api_key="none")
 r = client.chat.completions.create(model="strata", messages=[{"role": "user", "content": "Hello!"}])
 print(r.choices[0].message.content)
 ```
@@ -770,7 +770,7 @@ print(r.choices[0].message.content)
   `--prefill auto` (8192 tokens), a 42,131 token prompt read in 15 s sent six of them. A prompt shorter than one chunk
   sends nothing, and that is on purpose: its only line arrives once the prompt is read, because the last tokens go
   through the verify windows rather than the batched path, so it stops up to `--short-read` tokens short of the end.
-- **Chat apps.** Any app with an "OpenAI-compatible" provider works: base URL `http://127.0.0.1:8081/v1`, any API key.
+- **Chat apps.** Any app with an "OpenAI-compatible" provider works: base URL `http://127.0.0.1:8080/v1`, any API key.
   Zed's llama.cpp provider reads `/props` and offers tools from `chat_template_caps`. Its generic OpenAI-compatible
   provider does not: add `"capabilities": {"tools": true, "chat_completions": true}` on that model in Zed's settings.
 - **OpenCode** (#543). A starting point for `opencode.jsonc` (in your project, or `~/.config/opencode/`); the field
@@ -783,7 +783,7 @@ print(r.choices[0].message.content)
       "strata": {
         "npm": "@ai-sdk/openai-compatible",
         "name": "Strata (local)",
-        "options": { "baseURL": "http://127.0.0.1:8081/v1", "apiKey": "none" },  // or your api_key
+        "options": { "baseURL": "http://127.0.0.1:8080/v1", "apiKey": "none" },  // or your api_key
         "models": {
           "strata": {
             "name": "Qwen3.8-Flash-Next (Strata)",
@@ -807,7 +807,7 @@ print(r.choices[0].message.content)
   Keep `limit.output` well under it: a request whose prompt plus `max_tokens` runs past the context is refused (see
   **Context** below), or add `"fit_max_tokens": true` to `strata-<model>.json`. For a hard cap on the thinking, add
   `"reasoning_budget_tokens": N` to `strata-<model>.json` (see above).
-- **Claude Code** (Strata 0.1.17 or newer): set `ANTHROPIC_BASE_URL=http://127.0.0.1:8081` and
+- **Claude Code** (Strata 0.1.17 or newer): set `ANTHROPIC_BASE_URL=http://127.0.0.1:8080` and
   `ANTHROPIC_MODEL` to a Claude model name it knows (it refuses names it doesn't; Strata ignores the name), plus any
   `ANTHROPIC_AUTH_TOKEN` (or your `api_key`, if you set one).
 - **Codex CLI** (0.1.39): see [the Responses API](#the-responses-api-and-codex-cli) below.
@@ -829,12 +829,12 @@ print(r.choices[0].message.content)
 - **From other devices on your network.** The server listens on your PC only (`127.0.0.1`) unless you say otherwise:
   run setup with `START-HERE.bat --setup --host 0.0.0.0 --api-key some-long-secret` (or add `"host": "0.0.0.0"` and
   `"api_key": "..."` to `strata-<model>.json`). The server window then prints this PC's addresses
-  (`from other devices: http://192.168.x.x:8081/`); open that on the other device, or use `.../v1` as an API base URL.
+  (`from other devices: http://192.168.x.x:8080/`); open that on the other device, or use `.../v1` as an API base URL.
   On Windows the firewall blocks it until you allow it: accept its prompt for Python (private networks), or run
-  `New-NetFirewallRule -DisplayName "Strata 8081" -Direction Inbound -Protocol TCP -LocalPort 8081 -Action Allow -Profile Private`
+  `New-NetFirewallRule -DisplayName "Strata 8080" -Direction Inbound -Protocol TCP -LocalPort 8080 -Action Allow -Profile Private`
   in an admin PowerShell, and make sure the network is set to Private.
 - **From the internet.** Put a tunnel in front of it, for example [cloudflared](https://developers.cloudflare.com/cloudflare-one/connections/connect-networks/do-more-with-tunnels/trycloudflare/):
-  `cloudflared tunnel --url http://127.0.0.1:8081`. **Set a key first**, or anyone with the link can use your PC:
+  `cloudflared tunnel --url http://127.0.0.1:8080`. **Set a key first**, or anyone with the link can use your PC:
   add `"api_key": "some-long-secret"` to `strata-<model>.json` (or set the `STRATA_API_KEY` environment variable);
   clients then send it as their API key. Streamed answers carry `X-Accel-Buffering: no`, so nginx-style proxies pass
   each token on at once. The web app's settings and MCP tools only answer Strata's own page: when you open it through
@@ -950,9 +950,9 @@ requests of llama-server's slot API, for its single slot 0, when started with `-
 format is Strata's own, not llama.cpp's:
 
 ```bash
-curl -X POST "http://127.0.0.1:8081/slots/0?action=save"    -H "Content-Type: application/json" -d '{"filename": "chat1.bin"}'
+curl -X POST "http://127.0.0.1:8080/slots/0?action=save"    -H "Content-Type: application/json" -d '{"filename": "chat1.bin"}'
 # {"id_slot": 0, "filename": "chat1.bin", "n_saved": 63025, "n_written": 1198691396, "timings": {"save_ms": 709.5}}
-curl -X POST "http://127.0.0.1:8081/slots/0?action=restore" -H "Content-Type: application/json" -d '{"filename": "chat1.bin"}'
+curl -X POST "http://127.0.0.1:8080/slots/0?action=restore" -H "Content-Type: application/json" -d '{"filename": "chat1.bin"}'
 # {"id_slot": 0, "filename": "chat1.bin", "n_restored": 63025, "n_read": 1198691396, "timings": {"restore_ms": 898.2}}
 ```
 
@@ -1124,7 +1124,7 @@ show_raw_agent_reasoning = true         # show the model's thinking (it writes n
 
 [model_providers.strata]
 name = "Strata (local)"
-base_url = "http://127.0.0.1:8081/v1"
+base_url = "http://127.0.0.1:8080/v1"
 wire_api = "responses"
 stream_idle_timeout_ms = 600000         # a first, long prompt can take minutes to read
 # env_key = "STRATA_API_KEY"            # only if the server has an api_key: the variable holding it
@@ -1328,7 +1328,7 @@ you> What is the total on this receipt?
 ```python
 import base64
 from openai import OpenAI
-client = OpenAI(base_url="http://127.0.0.1:8081/v1", api_key="none")
+client = OpenAI(base_url="http://127.0.0.1:8080/v1", api_key="none")
 img = base64.b64encode(open("photo.jpg", "rb").read()).decode()
 r = client.chat.completions.create(model="strata", messages=[{"role": "user", "content": [
     {"type": "image_url", "image_url": {"url": f"data:image/jpeg;base64,{img}"}},
@@ -1442,7 +1442,7 @@ the document, +0.4% on the chat. Details: `bench/results/2026-09-27-esp/`.
 | --- | --- |
 | `the NVIDIA driver is too old` | Update the driver (NVIDIA App or nvidia.com/drivers), restart, run `START-HERE.bat` again. |
 | Python or the build tools could not be installed | Install what it names (links are printed), then run it again. Everything already done is kept. |
-| `port 8081 is already in use` | Strata is already running (look for its window), or another program uses the port: `START-HERE.bat --port 8082`. |
+| `port 8080 is already in use` | Strata is already running (look for its window), or another program uses the port: `START-HERE.bat --port 8081`. |
 | `cudaHostRegister ... out of memory` in the log | Normal on Windows: the engine pins the experts in per-layer slices instead. Only a problem if the load then fails. |
 | `ExpertCache: cudaMalloc(...) failed: out of memory` although VRAM is free | Windows' page file is off or tiny: every allocation on the graphics card is also charged to Windows' commit (RAM + page file). Set the page file to "System managed" (System > About > Advanced system settings > Performance > Advanced > Virtual memory) and restart. Since 0.1.19 the engine retries with a smaller cache instead of stopping, and setup warns about a page file under 4 GB (issue #60). |
 | The first start takes minutes | It is reading 34-55 GB into RAM; the second start is faster while the files are in the OS cache. |

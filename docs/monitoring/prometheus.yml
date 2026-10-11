@@ -9,4 +9,4 @@ scrape_configs:
       type: Bearer
       credentials_file: /etc/prometheus/strata-api-key
     static_configs:
-      - targets: ["127.0.0.1:8081"]
+      - targets: ["127.0.0.1:8080"]
