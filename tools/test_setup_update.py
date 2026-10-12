@@ -110,7 +110,7 @@ class SettingsLine(unittest.TestCase):
     """#564: a start prints the settings it uses (the engine options without the model's paths, and the server's
     fields), so a change made by hand to strata-<model>.json shows without reading the log."""
 
-    CFG = {"exe": "x", "host": "0.0.0.0", "port": 8081, "api_key": "secret", "gpu": [0, 1], "fit_max_tokens": True,
+    CFG = {"exe": "x", "host": "0.0.0.0", "port": 8080, "api_key": "secret", "gpu": [0, 1], "fit_max_tokens": True,
            "args": ["--native", "E:\\Strata\\packs\\iq3_s", "--mtp", "/s/mtp/rt", "m.gguf", "--kv", "int8",
                     "--kv-resident", "32768", "--spec-min-p", "0.5", "--vram-reserve-mib", "2048", "--mmap-experts",
                     "--prefill", "auto"]}
@@ -118,7 +118,7 @@ class SettingsLine(unittest.TestCase):
     def test_summary(self):
         s = setup.settings_summary(self.CFG)
         self.assertEqual(s, "--kv int8 --kv-resident 32768 --spec-min-p 0.5 --vram-reserve-mib 2048 --mmap-experts "
-                            "--prefill auto; server 0.0.0.0:8081, api key set, gpu 0,1, fit_max_tokens true")
+                            "--prefill auto; server 0.0.0.0:8080, api key set, gpu 0,1, fit_max_tokens true")
         self.assertNotIn("secret", s)
         self.assertIn("127.0.0.1:9000", setup.settings_summary({"args": []}, 9000))
 

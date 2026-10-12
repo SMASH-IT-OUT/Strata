@@ -43,7 +43,7 @@ PROTOCOLS = ("2025-06-18", "2025-03-26", "2024-11-05")   # the revisions this se
 VERSION = "0.1.0"
 WIN = os.name == "nt"
 DEFAULT_ROOT = Path(__file__).resolve().parent.parent
-DEFAULT_PORT = 8081
+DEFAULT_PORT = 8080
 STATE_DIR = ".strata-mcp"                             # in the Strata folder (git-ignored)
 
 # What setup.py offers, used only when setup.py cannot be imported (the numbers are setup's MODELS / FAMILIES /
@@ -926,7 +926,7 @@ MODEL_ID_PATTERN = r"[A-Za-z0-9][A-Za-z0-9_.-]{0,48}"
 
 def tool_defs(models: dict, families: dict, contexts: list) -> list:
     port = {"type": "integer", "minimum": 1024, "maximum": 65535,
-            "description": "the server's port (default: the installed model's port, usually 8081)"}
+            "description": "the server's port (default: the installed model's port, usually 8080)"}
     installed_model = {"type": "string", "pattern": MODEL_ID_PATTERN, "maxLength": 49,
                        "description": "an installed model's id as strata_status lists it (e.g. 'q2_0', "
                                       "'coder-iq1_m', 'swift-iq3_xxs'); default: the most recently used one"}
@@ -980,7 +980,7 @@ def tool_defs(models: dict, families: dict, contexts: list) -> list:
                          "description": "auto (default), cuda = NVIDIA, hip = AMD on Linux (experimental)"},
              "low_ram": {"type": "string", "enum": ["auto", "on", "off", "resident", "mmap"],
                          "description": "setup's low-RAM mode (default auto)"},
-             "port": {**port, "description": "the port the model will listen on (default 8081)"},
+             "port": {**port, "description": "the port the model will listen on (default 8080)"},
              "data_dir": {"type": "string", "maxLength": 260,
                           "description": "where the model files go (default: the Strata-data folder next to the "
                                          "Strata folder). Only the current data folder, a folder inside the Strata "
@@ -1560,7 +1560,7 @@ class Tools:
 
 # ------------------------------------------------------------------------------------------------ MCP over stdio
 INSTRUCTIONS = ("Strata runs a large AI model (Qwen3.8-Flash-Next, a mixture of experts) locally on this PC's GPU and "
-                "RAM, with an OpenAI- and Anthropic-compatible server on http://127.0.0.1:8081. Call strata_status "
+                "RAM, with an OpenAI- and Anthropic-compatible server on http://127.0.0.1:8080. Call strata_status "
                 "first. To install: strata_install (it returns a plan; get the user's OK for the 58-111 GB download, "
                 "then call it with confirm=true; it runs in the background - call it again for progress). Then "
                 "strata_start, strata_stop, strata_logs for problems, strata_connect_info to point other apps at it.")
