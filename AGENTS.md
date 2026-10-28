@@ -21,3 +21,17 @@ offers the same steps as tools.
   `tools/test_setup_amd.py`, `tools/test_setup_choices.py`).
 - Keep the docs' style: plain words, measured numbers with what they were measured on, no claims without a
   measurement.
+
+## Agent shortcuts: Ace and Bob (owner, 2026-10-28)
+
+The owner hands work to two Claude agents by a short name. The three names on each line mean the same agent:
+
+| they write | they mean | name in GT and on GitHub |
+|---|---|---|
+| `Ace`, `AC1` or `Claude-1` | the Claude project in the owner's first Claude account | `Claude-1` |
+| `Bob`, `AC2` or `Claude-2` | the Claude project in the owner's second Claude account ("Claude 2" in GT's Usage screens) | `Claude-2` |
+
+"Give this to Bob" means the item now belongs to Claude-2: assign its GT task to `Claude-2`, or, for a GitHub issue
+with no GT task yet, add the label `agent: Claude-2`. Ace works the same way with `Claude-1`. Do not start an item
+that belongs to the other agent. Full rules:
+[two-claude-projects.md](https://github.com/SMASH-IT-OUT/GT/blob/main/docs/two-claude-projects.md) in GT.
