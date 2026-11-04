@@ -5,6 +5,19 @@ normal PC: one NVIDIA or AMD graphics card plus system RAM, on Windows or Linux.
 (`src/`, `include/`), a Python server with an OpenAI- and Anthropic-compatible API and a web app (`serve/`), and a
 one-click installer (`setup.py`, started by `START-HERE.bat` / `setup.sh`).
 
+## Plain language in everything you write (owner, 2026-10-18)
+
+Everything you write for a person must meet the ISO plain language standard, **ISO 24495-1:2023**.
+That covers chat replies, docs, commit messages, PR and issue text, reports, logs meant to be read,
+and any text the app shows its users. The test is the standard's own: the reader can easily **find**
+what they need, **understand** it, and **use** it.
+
+- Write for the reader you have, and say what they need first.
+- Use short sentences, common words and the active voice. Explain a technical term the first time,
+  or leave it out.
+- Group related points under clear headings, and use lists and tables where they help someone scan.
+- Cut anything that does not help the reader act. Shorter is better, but never at the cost of clarity.
+
 ## Installing Strata for a user
 
 Follow **[docs/AI_SETUP.md](docs/AI_SETUP.md)**: check the PC, pick the model by RAM, run setup non-interactively,
